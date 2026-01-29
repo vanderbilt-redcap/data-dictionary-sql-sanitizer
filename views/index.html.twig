@@ -14,25 +14,26 @@
         $(document).ready(function () {
             // Add click event listener to the sanitize button
             $('#download-data-dictionary').on('click', function () {
-                // Prepare the data to send (pass `sql_fields_sanitize` as a JSON object)
-                const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
+                console.log("IN")
 
+                const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
+                const postData = {
+                    redcap_csrf_token: '{{ redcap_csrf_token | raw }}',
+                    sqlData: sqlData
+                };
+                console.log(postData)
                 // Send the AJAX request using jQuery
                 $.ajax({
-                    url: {{ download_data_dictionary_url }},
+                    url: '{{ download_data_dictionary_url | raw}}',
                     type: 'POST',
-                    data: JSON.stringify(sqlData),
-                    contentType: 'application/json',
-                    dataType: 'json',
+                    data: postData,
                     success: function (response) {
                         // Handle successful response
                         console.log('Sanitization successful:', response);
-                        alert('SQL sanitization completed successfully!');
                     },
                     error: function (xhr, status, error) {
                         // Handle errors
                         console.error('Error during sanitization:', error);
-                        alert('An error occurred during SQL sanitization.');
                     },
                 });
             });
