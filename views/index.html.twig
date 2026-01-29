@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Cache-control" content="public">
+    <meta name="theme-color" content="#fff">
+    <link type='text/css' href='{{ styles }}' rel='stylesheet' media='screen' />
+    {{ redcap_js|raw }}
+    <script>
+        $(document).ready(function () {
+            // Add click event listener to the sanitize button
+            $('#download-data-dictionary').on('click', function () {
+                // Prepare the data to send (pass `sql_fields_sanitize` as a JSON object)
+                const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
+
+                // Send the AJAX request using jQuery
+                $.ajax({
+                    url: {{ download_data_dictionary_url }},
+                    type: 'POST',
+                    data: JSON.stringify(sqlData),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (response) {
+                        // Handle successful response
+                        console.log('Sanitization successful:', response);
+                        alert('SQL sanitization completed successfully!');
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors
+                        console.error('Error during sanitization:', error);
+                        alert('An error occurred during SQL sanitization.');
+                    },
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div class="alert col-md-12" style="display:none;margin-top: 20px" id="messageHandlerDisplay"></div>
+
+    <div class="title" style="padding-top:15px">
+        <div class="alert alert-info" style="margin-bottom: 25px;width: 98%;">
+            <div>This module allows a user to download the current Data Dictionary replacing the PIDs inside all SQL fields for a constant added
+                in the module's configuration page.
+            </div>
+            <br/>
+            <div>
+                There are currently <strong>{{ sql_fields_sanitize.total }} SQL fields</strong> on this project.
+            </div>
+        </div>
+        <div>
+            <div>
+                <button class="btn btn-primary" onclick="$('#sanitize-data').modal('show');">Download Sanitized Data Dictionary</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sanitize-data" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editConceptLabel">Sanitize SQLs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>Review these SQL pids before sanitizing.</div>
+                        {% for key, sql_data in sql_fields_sanitize %}
+                            {% if key != "total" %}
+                                <h6 class="pt-4">PID {{"#" ~ sql_data.pid ~ " - " }}<a href="{{ APP_PATH_WEBROOT_ALL ~ "index.php?pid=" ~ sql_data.pid }}" target="_blank">{{ sql_data.title }}</a></h6>
+                                <div class="ps-3 ">
+                                    <div class="pt-2">
+                                        Replace PID with: <input type="text" id="{{ "pid-" ~ sql_data.pid }}" name="{{ "pid-" ~ sql_data.pid }}" value="{{ sql_data.constant }}">
+                                    </div>
+                                    <div class="pt-2">
+                                        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ sql_data.pid }}" aria-expanded="false" aria-controls="collapse-{{ sql_data.pid }}">
+                                            <i class="fa fa-eye me-2"></i> See SQLs
+                                        </button>
+                                        <div class="collapse" id="collapse-{{ sql_data.pid }}">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>SQL Query</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for sql in sql_data.sqls %}
+                                                    <tr>
+                                                        <td>{{ loop.index }}</td>
+                                                        <td>{{ sql | raw }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="download-data-dictionary"><span class="fa fa-arrow-down"></span> Data Dictionary</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
