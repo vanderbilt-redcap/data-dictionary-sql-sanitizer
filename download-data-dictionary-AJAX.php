@@ -36,7 +36,7 @@ $headerMapping = [
 ];
 
 // Set the file name for download
-$fileName = "output.csv";
+$fileName = "Sanitized_".$this->getProject($pid)->getTitle()."_".date("Y-m-d_h-i",time()).".csv";
 
 // Set HTTP headers to trigger file download
 header('Content-Type: text/csv');
