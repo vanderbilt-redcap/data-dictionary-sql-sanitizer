@@ -10,7 +10,8 @@ if(!defined('APP_PATH_WEBROOT_ALL')) {
 }
 
 $module->initialize();
-
+//print_array($module->sanitizeSQLFields($pid));
+//print_array($dataDictionary = \REDCap::getDataDictionary($pid, 'array', false));
 echo $module->getTwig()->render('index.html.twig', [
                                                      'redcap_js' => $module->loadREDCapJS(),
                                                      'pid' => $pid,

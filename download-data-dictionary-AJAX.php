@@ -2,7 +2,10 @@
 
 namespace VUMC\DataDictionarySQLSanitizer;
 
-error_log("IN");
+error_log("---------IN AJAX---------");
+$pid = (int)$_REQUEST['pid'];
+$dataDictionary = \REDCap::getDataDictionary($pid, 'array', false);
 
-error_log(json_encode($_REQUEST,JSON_PRETTY_PRINT));
+$sanitizedDataDictionary = $module->sanitizeDataDictionary($dataDictionary, $_REQUEST['sqlData']);
+
 echo "success";

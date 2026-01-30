@@ -26,6 +26,26 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         $this->getTwig()->addGlobal('APP_PATH_WEBROOT_ALL', APP_PATH_WEBROOT_ALL);
     }
 
+    public function sanitizeSQL($sql): string
+    {
+        // Remove HTML spans
+        $sql = preg_replace('/<span class=\'highlight\'>(.*?)<\/span>/', '$1', $sql);
+
+        // Normalize all whitespace (spaces, tabs, newlines)
+        $sql = preg_replace('/\s+/', ' ', $sql);
+
+        // Trim edges and convert to lowercase
+        return strtolower(trim($sql));
+    }
+
+    public function getPatterns(): array
+    {
+        return [
+            '/project_id\s*=\s*(\d+)/',   // Matches "project_id = 1234" or "project_id=1234"
+            '/\[data-table:(.*?)\]/'      // Matches "[data-table:1234]"
+        ];
+    }
+
     public function sanitizeSQLFields($pid): ?array
     {
         $total = 0;
@@ -54,7 +74,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
                             $row['select_choices_or_calculations']
                         );
 
-                        $pidSqlMap[$pid][] = $highlightedSql;
+                        $pidSqlMap[$pid][$row['field_name']] = $highlightedSql;
                     }
 
                     // Keep track of all unique PIDs
@@ -96,16 +116,56 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         return $array;
     }
 
+    public function sanitizeDataDictionary(array $dataDictionary, array $sqlData): array
+    {
+        // Get the patterns for replacement
+        $patterns = $this->getPatterns();
+        error_log("sanitizeDataDictionary");
+        // Loop through each field in the data dictionary
+        foreach ($dataDictionary as $fieldName => &$row) {
+            // Check if the field has SQL in 'select_choices_or_calculations'
+            if (strtolower($row['field_type']) === "sql" && isset($row['select_choices_or_calculations']) && !empty($row['select_choices_or_calculations'])) {
+                $sanitizedSql = $this->sanitizeSQL($row['select_choices_or_calculations']);
+
+                foreach ($sqlData as $sqlIndex => $sqlEntry) {
+                    if ($sqlIndex === "total") {
+                        continue; // Skip the "total" field in `$sqlData`
+                    }
+
+                    if (isset($sqlEntry['sqls']) && is_array($sqlEntry['sqls'])) {
+                        foreach ($sqlEntry['sqls'] as $sqlKey => $sqlValue) {
+                            if ($sqlKey == $row['field_name']) {
+                                // Replacement logic
+                                $replacement = "'" . $sqlEntry['constant'] . "'";
+                                $row['select_choices_or_calculations'] = preg_replace_callback(
+                                    $patterns,
+                                    function ($matches) use ($sqlEntry, $replacement) {
+                                        if (preg_match('/^\d+$/', $matches[1]) && (int)$matches[1] === (int)$sqlEntry['pid']) {
+                                            return str_replace($matches[1], $replacement, $matches[0]);
+                                        }
+                                        if ($matches[1] === "project_id") {
+                                            return "[data-table:{$replacement}]";
+                                        }
+                                        return $matches[0];
+                                    },
+                                    $sanitizedSql
+                                );
+                                break; // Exit loop once a match is found
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $dataDictionary;
+    }
+
     private function replacePids($sql): array
     {
         $uniquePids = [];
 
-        $patterns = [
-            '/project_id\s*=\s*(\d+)/',   // Matches "project_id = 1234" or "project_id=1234"
-            '/\[data-table:(.*?)\]/'    // Matches "[data-table:project_id]"
-        ];
-
-        foreach ($patterns as $pattern) {
+        foreach ($this->getPatterns() as $pattern) {
             preg_match_all($pattern, $sql, $matches);
             $pidMatches = $this->arrayKeyExistsReturnValue($matches, [1, 0]);
 
