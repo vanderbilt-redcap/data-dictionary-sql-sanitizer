@@ -13,26 +13,34 @@
     <script>
         $(document).ready(function () {
             $('#download-data-dictionary').on('click', function () {
-
+                // Prepare POST data
                 const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
                 const postData = {
                     redcap_csrf_token: '{{ redcap_csrf_token | raw }}',
                     pid: '{{ pid | raw }}',
-                    sqlData: sqlData
+                    sqlData: JSON.stringify(sqlData)
                 };
-                {#console.log('{{ download_data_dictionary_url | raw}}'+postData)#}
-                $.ajax({
-                    url: '{{ download_data_dictionary_url | raw}}',
-                    type: 'POST',
-                    data: postData,
-                    success: function (response) {
-                        // Handle successful response
-                        console.log('Sanitization successful:', response);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error during sanitization:', error);
-                    },
-                });
+
+                // Create a hidden form
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ download_data_dictionary_url | raw }}';
+
+                // Add data as hidden fields
+                for (const key in postData) {
+                    if (postData.hasOwnProperty(key)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = postData[key];
+                        form.appendChild(input);
+                    }
+                }
+
+                // Append form to body, submit it, and remove it
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
             });
         });
     </script>

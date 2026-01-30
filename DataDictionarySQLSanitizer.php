@@ -12,6 +12,15 @@ use Twig\TwigFunction;
 
 class DataDictionarySQLSanitizer extends AbstractExternalModule
 {
+    public function redcap_module_link_check_display($pid, $link)
+    {
+        #Only available for super users / admins
+        if (!$this->isSuperUser()) {
+            return false;
+        }
+
+        return parent::redcap_module_link_check_display($pid, $link);
+    }
     public function initialize()
     {
         $this->initializeTwig();
@@ -120,7 +129,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
     {
         // Get the patterns for replacement
         $patterns = $this->getPatterns();
-        error_log("sanitizeDataDictionary");
+
         // Loop through each field in the data dictionary
         foreach ($dataDictionary as $fieldName => &$row) {
             // Check if the field has SQL in 'select_choices_or_calculations'
