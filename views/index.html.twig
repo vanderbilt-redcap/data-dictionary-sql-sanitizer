@@ -15,6 +15,19 @@
             $('#download-data-dictionary').on('click', function () {
                 // Prepare POST data
                 const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
+
+                // Replace SQL pids with constants from input fields
+                for (const key in sqlData) {
+                    if (key !== 'total' && sqlData.hasOwnProperty(key)) {
+                        const sql_data = sqlData[key];
+                        const inputId = `pid-${sql_data.pid}`;
+                        const constantValue = document.getElementById(inputId).value;
+
+                        // Replace the constant value in the SQL data object
+                        sql_data.constant = constantValue;
+                    }
+                }
+
                 const postData = {
                     redcap_csrf_token: '{{ redcap_csrf_token | raw }}',
                     pid: '{{ pid | raw }}',
