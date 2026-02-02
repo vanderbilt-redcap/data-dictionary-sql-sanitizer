@@ -37,9 +37,9 @@
                 // Create a hidden form
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '{{ download_data_dictionary_url | raw }}';
+                form.action = '{{ download_data_dictionary_url | raw }}'; // URL pointing to your PHP file
 
-                // Add data as hidden fields
+                // Add POST data as hidden fields
                 for (const key in postData) {
                     if (postData.hasOwnProperty(key)) {
                         const input = document.createElement('input');
@@ -50,10 +50,13 @@
                     }
                 }
 
-                // Append form to body, submit it, and remove it
+                // Append the form to the body, submit it, and remove it
                 document.body.appendChild(form);
-                form.submit();
-                document.body.removeChild(form);
+                form.submit(); // This triggers the download
+                document.body.removeChild(form); // Clean up the form
+
+                // Optionally close the modal after triggering the download
+                $('#sanitize-data').modal('hide');
             });
         });
     </script>
@@ -67,16 +70,16 @@
             <div class="round chklist">
                 <div class="chklisthdr">Instructions</div>
                 <div class="chklisttext">
-                    <p class="text-muted">Follow the instructions below for using the module:</p>
+                    <p class="text-muted">Follow the instructions below to use the module:</p>
                     <ol>
                         <li class="mb-3">
                             <p>
-                                This module allows a user to download the current Data Dictionary, replacing the PIDs inside all SQL fields with a constant added in the module's configuration page.
+                                This module enables users to download the current Data Dictionary, replacing PIDs in all SQL fields with a constant specified on the module's configuration page.
                             </p>
                         </li>
                         <li class="mb-3">
                             <p>
-                                There are currently <strong>{{ sql_fields_sanitize.total }} SQL fields</strong> in this project.
+                                This project currently contains <strong>{{ sql_fields_sanitize.total }} SQL fields</strong>.
                             </p>
                         </li>
                     </ol>

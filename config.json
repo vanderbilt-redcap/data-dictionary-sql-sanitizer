@@ -21,11 +21,11 @@
     ]
   },
   "no-auth-pages": [],
-  "description": "External Module that sanitizes the PIDs inside an SQL field. This will allow the user to download the Data Dictionary without any current PIDs inside SQL fields.",
+  "description": "An external module that sanitizes PIDs within SQL fields. This ensures that users can download the Data Dictionary without any current PIDs present in the SQL fields.",
   "project-settings": [
     {
       "key": "pid-constant",
-      "name": "<div>PID Constant</div><font style='color:red;font-style:italic'>*Write the name of the constant you want to replace the pid with.<br/>If left blank it will add blank values on the pids.</font>",
+      "name": "<div>PID Constant</div>\n<font style=\"color:red; font-style:italic;\">\n*Enter the name of the constant you want to use to replace the PID.<br/>\nIf left blank, the PIDs will be replaced with empty values.\n</font>",
       "type": "text"
     }
   ],
