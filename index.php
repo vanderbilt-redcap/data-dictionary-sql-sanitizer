@@ -2,6 +2,11 @@
 
 $pid = (int)$_GET['pid'];
 
+#Only available for super users / admins
+if (!$module->isSuperUser()) {
+    die;
+}
+
 if(!defined('APP_PATH_WEBROOT_ALL')) {
     if (APP_PATH_WEBROOT[0] == '/') {
         $APP_PATH_WEBROOT_ALL = substr(APP_PATH_WEBROOT, 1);
