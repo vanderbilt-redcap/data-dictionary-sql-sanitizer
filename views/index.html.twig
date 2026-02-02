@@ -57,15 +57,16 @@
 
                 // Optionally close the modal after triggering the download
                 $('#sanitize-data').modal('hide');
+                $('#message').show();
             });
         });
     </script>
 </head>
 <body>
 
-    <div class="alert col-md-12" style="display:none;margin-top: 20px" id="messageHandlerDisplay"></div>
+   <div class="alert alert-success" style="display:none;margin-top: 20px;max-width: 690px;" id="message">{{flashbag_messages[0].message}}</div>
 
-    <div class="row">
+   <div class="row">
         <div class="col-sm-6">
             <div class="round chklist">
                 <div class="chklisthdr">Instructions</div>
@@ -74,12 +75,22 @@
                     <ol>
                         <li class="mb-3">
                             <p>
-                                This module enables users to download the current Data Dictionary, replacing PIDs in all SQL fields with a constant specified on the module's configuration page.
+                                This module allows users to download the current Data Dictionary while replacing PIDs in all SQL fields with a constant defined on the module's configuration page.
+                            </p>
+                        </li>
+                        <li class="mb-3">
+                            <p>
+                                Specify the name of the constant to replace the PID in the <a href="{{ APP_PATH_WEBROOT_ALL ~ "ExternalModules/manager/project.php?pid=" ~ pid }}" target="_blank">module's configuration</a>, or manually input the values afterward.
                             </p>
                         </li>
                         <li class="mb-3">
                             <p>
                                 This project currently contains <strong>{{ sql_fields_sanitize.total }} SQL fields</strong>.
+                            </p>
+                        </li>
+                        <li class="mb-3">
+                            <p>
+                                Click the button below to initiate the sanitation process.
                             </p>
                         </li>
                     </ol>
@@ -90,7 +101,7 @@
 
     <div>
         <div>
-            <button class="btn btn-primary" onclick="$('#sanitize-data').modal('show');">Download Sanitized Data Dictionary</button>
+            <button class="btn btn-primary" onclick="$('#sanitize-data').modal('show');$('#message').hide();"><span class="fa fa-solid fa-file-circle-check"></span> Sanitize Data Dictionary SQLs</button>
         </div>
     </div>
 
@@ -103,7 +114,8 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <div>Review these SQL pids before sanitizing.</div>
+                        <div>Please review these SQL PIDs before proceeding with data sanitization.<br/>
+                            Alternatively, you may manually input and edit the values as needed.</div>
                         {% for key, sql_data in sql_fields_sanitize %}
                             {% if key != "total" %}
                                 <h6 class="pt-4">PID {{"#" ~ sql_data.pid ~ " - " }}<a href="{{ APP_PATH_WEBROOT_ALL ~ "index.php?pid=" ~ sql_data.pid }}" target="_blank">{{ sql_data.title }}</a></h6>
@@ -142,7 +154,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="download-data-dictionary"><span class="fa fa-arrow-down"></span> Data Dictionary</button>
+                    <button type="button" class="btn btn-success" id="download-data-dictionary"><span class="fa fa-arrow-down"></span> Download</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
