@@ -12,6 +12,13 @@
     {{ redcap_js|raw }}
     <script>
         $(document).ready(function () {
+            // Show the modal and reset collapsibles when the button is clicked
+            $('#sanitize-data').on('show.bs.modal', function () {
+                // Collapse all collapsible items
+                $('.collapse').collapse('hide');
+                $('#message').hide();
+            });
+
             $('#download-data-dictionary').on('click', function () {
                 // Prepare POST data
                 const sqlData = {{ sql_fields_sanitize|json_encode|raw }};
