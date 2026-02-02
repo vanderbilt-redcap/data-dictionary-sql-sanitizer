@@ -79,7 +79,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         ];
     }
 
-    public function sanitizeSQLFields($pid): ?array
+    public function sanitizeSQLFields($pid): array
     {
         $total = 0;
         $dataDictionary = REDCap::getDataDictionary($pid, 'array', false);
@@ -131,7 +131,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
 
             return $constantArray;
         }
-        return null;
+        return [];
     }
 
     public function arrayKeyExistsReturnValue($array, $keys) {
