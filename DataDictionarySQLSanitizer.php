@@ -55,6 +55,30 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         ];
     }
 
+    public function getHeaders():array
+    {
+        return [
+            'field_name' => 'Variable / Field Name',
+            'form_name' => 'Form Name',
+            'section_header' => 'Section Header',
+            'field_type' => 'Field Type',
+            'field_label' => 'Field Label',
+            'select_choices_or_calculations' => 'Choices, Calculations, OR Slider Labels',
+            'field_note' => 'Field Note',
+            'text_validation_type_or_show_slider_number' => 'Text Validation Type OR Show Slider Number',
+            'text_validation_min' => 'Text Validation Min',
+            'text_validation_max' => 'Text Validation Max',
+            'identifier' => 'Identifier?',
+            'branching_logic' => 'Branching Logic (Show field only if...)',
+            'required_field' => 'Required Field?',
+            'custom_alignment' => 'Custom Alignment',
+            'question_number' => 'Question Number (surveys only)',
+            'matrix_group_name' => 'Matrix Group Name',
+            'matrix_ranking' => 'Matrix Ranking?',
+            'field_annotation' => 'Field Annotation'
+        ];
+    }
+
     public function sanitizeSQLFields($pid): ?array
     {
         $total = 0;
