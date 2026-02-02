@@ -134,7 +134,8 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         return [];
     }
 
-    public function arrayKeyExistsReturnValue($array, $keys) {
+    public function arrayKeyExistsReturnValue($array, $keys) : ?string
+    {
         if (!is_array($keys)) {
             return null;
         }
