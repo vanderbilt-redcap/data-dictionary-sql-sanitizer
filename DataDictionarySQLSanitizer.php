@@ -166,8 +166,8 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
                         continue; // Skip the "total" field in `$projectSqls`
                     }
 
-                    if (isset($sqlEntry['sqls']) && is_array($sqlEntry['sqls'])) {
-                        foreach ($sqlEntry['sqls'] as $sqlKey => $sqlValue) {
+                    if (isset($sqlEntry['sqlVariables']) && is_array($sqlEntry['sqlVariables'])) {
+                        foreach ($sqlEntry['sqlVariables'] as $sqlKey => $sqlValue) {
                             if ($sqlKey == $row['field_name']) {
                                 // Replacement logic
                                 $replacement = "'" . $sqlEntry['constant'] . "'";
