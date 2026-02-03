@@ -79,6 +79,21 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         ];
     }
 
+    /**
+     * This method processes the SQL fields within a project's data dictionary and extracts relevant information,
+     * such as PIDs (Project IDs) referenced in those SQL statements. It maps each PID to its associated SQL fields
+     * and highlights occurrences of the PID within the SQL strings. Additionally, it generates a list of constants
+     * for each PID and returns a structured array containing all this information.
+     *
+     * Key Steps:
+     * 1. Retrieve the project's data dictionary using the REDCap API (`REDCap::getDataDictionary`).
+     * 2. Identify fields of type `SQL` and extract their `select_choices_or_calculations` values.
+     * 3. Parse and extract unique PIDs from the SQL strings using the helper method `replacePids`.
+     * 4. Highlight occurrences of each PID in the SQL string for better visibility in the output.
+     * 5. Map each PID to its associated SQL fields and structure the data.
+     * 6. Generate a constant value for each PID based on project settings and include additional metadata (e.g., project title).
+     * 7. Return a structured array containing the total count of SQL fields, the unique PIDs, and their associated data.
+     */
     public function sanitizeSQLFields($pid): array
     {
         $total = 0;
@@ -150,6 +165,23 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         return $array;
     }
 
+    /**
+     * This method processes a project's data dictionary to sanitize SQL fields and replace specific placeholders
+     * with constants derived from `projectSqls`. It ensures SQL statements within the data dictionary are properly
+     * sanitized and updated with relevant dynamic values for further usage or display.
+     *
+     * Key Steps:
+     * 1. Retrieve predefined patterns for placeholder replacement using the `getPatterns` method.
+     * 2. Iterate through each field in the `dataDictionary`, focusing on fields of type `SQL`.
+     * 3. Sanitize the raw SQL string using the `sanitizeSQL` method.
+     * 4. Match and replace placeholders in SQL strings with constants provided in the `projectSqls` array:
+     *    - Replace numeric PIDs with their corresponding constants.
+     *    - Replace "project_id" placeholders with a special `[data-table:{constant}]` format.
+     *    - Preserve SQL integrity while applying replacements using `preg_replace_callback`.
+     * 5. Update the `select_choices_or_calculations` property of the `dataDictionary` with the sanitized and replaced SQL string.
+     * 6. Return the modified `dataDictionary` for further processing or usage.
+     *
+     */
     public function sanitizeDataDictionary(array $dataDictionary, array $projectSqls): array
     {
         // Get the patterns for replacement

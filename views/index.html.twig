@@ -19,6 +19,20 @@
                 $('#message').hide();
             });
 
+            /**
+             * This method is triggered when the '#download-data-dictionary' button is clicked.
+             * It dynamically creates a hidden form that sends data to a PHP file via a POST request.
+             * The PHP file processes the provided data and generates a downloadable CSV file for the user.
+             *
+             * Key Steps:
+             * 1. Retrieve SQL configuration (`projectSqls`) from the server-side.
+             * 2. Replace placeholder constants in the SQL data with user-provided values from input fields.
+             * 3. Create a hidden form and populate it with POST data (including CSRF token for security).
+             * 4. Submit the form programmatically to trigger the PHP file execution.
+             * 5. Remove the form from the DOM after submission for cleanup.
+             * 6. Optionally provide visual feedback to the user (e.g., hiding modals or showing messages).
+             *
+             */
             $('#download-data-dictionary').on('click', function () {
                 // Prepare POST data
                 const projectSqls = {{ sql_fields_sanitize|json_encode|raw }};
@@ -44,7 +58,7 @@
                 // Create a hidden form
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '{{ download_data_dictionary_url | raw }}'; // URL pointing to your PHP file
+                form.action = '{{ download_data_dictionary_url | raw }}'; // URL pointing to PHP file
 
                 // Add POST data as hidden fields
                 for (const key in postData) {
@@ -59,10 +73,10 @@
 
                 // Append the form to the body, submit it, and remove it
                 document.body.appendChild(form);
-                form.submit(); // This triggers the download
-                document.body.removeChild(form); // Clean up the form
+                form.submit();
+                document.body.removeChild(form);
 
-                // Optionally close the modal after triggering the download
+                // Close the modal after triggering the download
                 $('#sanitize-data').modal('hide');
                 $('#message').show();
             });
