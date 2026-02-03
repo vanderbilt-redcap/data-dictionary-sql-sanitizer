@@ -5,7 +5,7 @@ namespace VUMC\DataDictionarySQLSanitizer;
 $pid = (int)$_REQUEST['pid'];
 $dataDictionary = \REDCap::getDataDictionary($pid, 'array', false);
 
-$sanitizedDataDictionary = $module->sanitizeDataDictionary($dataDictionary, json_decode($_REQUEST['sqlData'], true));
+$sanitizedDataDictionary = $module->sanitizeDataDictionary($dataDictionary, json_decode($_REQUEST['projectSqls'], true));
 
 // Check if the data is valid
 if (empty($sanitizedDataDictionary)) {

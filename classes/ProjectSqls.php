@@ -2,11 +2,11 @@
 
 namespace VUMC\DataDictionarySQLSanitizer;
 
-class SQLData
+class ProjectSqls
 {
     public $pid;       // The project ID
     public $constant;  // The constant string (e.g., PID-HARMONIST1)
-    public $title;     // The original PID project title
+    public $projectTitle;     // The original PID project title
     public $sqls;      // Array of SQLs associated with the PID
 
     /**
@@ -14,14 +14,14 @@ class SQLData
     *
     * @param string $pid
     * @param string $constant
-    * @param string $title
+    * @param string $projectTitle
     * @param array $sqls
     */
-    public function __construct($pid, $constant, $title, $sqls = [])
+    public function __construct($pid, $constant, $projectTitle, $sqls = [])
     {
         $this->pid = $pid;
         $this->constant = $constant;
-        $this->title = $title;
+        $this->projectTitle = $projectTitle;
         $this->sqls = $sqls;
     }
 }

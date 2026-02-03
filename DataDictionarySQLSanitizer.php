@@ -2,7 +2,7 @@
 
 namespace VUMC\DataDictionarySQLSanitizer;
 
-include_once(__DIR__ . "/classes/SQLData.php");
+include_once(__DIR__ . "/classes/ProjectSqls.php");
 
 use Exception;
 use REDCap;
@@ -120,7 +120,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
                 $constant = $this->getProjectSetting("pid-constant");
                 $constantValue = !empty($constant) ? $constant . ($index + 1) : "";
 
-                $constantArray[] = new SQLData(
+                $constantArray[] = new ProjectSqls(
                     $pid,
                     $constantValue,
                     $this->getProject($pid)->getTitle(),
@@ -150,7 +150,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
         return $array;
     }
 
-    public function sanitizeDataDictionary(array $dataDictionary, array $sqlData): array
+    public function sanitizeDataDictionary(array $dataDictionary, array $projectSqls): array
     {
         // Get the patterns for replacement
         $patterns = $this->getPatterns();
@@ -161,9 +161,9 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
             if (strtolower($row['field_type']) === "sql" && isset($row['select_choices_or_calculations']) && !empty($row['select_choices_or_calculations'])) {
                 $sanitizedSql = $this->sanitizeSQL($row['select_choices_or_calculations']);
 
-                foreach ($sqlData as $sqlIndex => $sqlEntry) {
+                foreach ($projectSqls as $sqlIndex => $sqlEntry) {
                     if ($sqlIndex === "total") {
-                        continue; // Skip the "total" field in `$sqlData`
+                        continue; // Skip the "total" field in `$projectSqls`
                     }
 
                     if (isset($sqlEntry['sqls']) && is_array($sqlEntry['sqls'])) {
