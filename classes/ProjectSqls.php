@@ -7,7 +7,7 @@ class ProjectSqls
     public $pid;       // The project ID
     public $constant;  // The constant string (e.g., PID-HARMONIST1)
     public $projectTitle;     // The original PID project title
-    public $sqls;      // Array of SQLs associated with the PID
+    public $sqlVariables;      // Array of SQLs associated with the PID
 
     /**
     * Constructor to initialize the object.
@@ -15,13 +15,13 @@ class ProjectSqls
     * @param string $pid
     * @param string $constant
     * @param string $projectTitle
-    * @param array $sqls
+    * @param array $sqlVariables
     */
-    public function __construct($pid, $constant, $projectTitle, $sqls = [])
+    public function __construct($pid, $constant, $projectTitle, $sqlVariables = [])
     {
         $this->pid = $pid;
         $this->constant = $constant;
         $this->projectTitle = $projectTitle;
-        $this->sqls = $sqls;
+        $this->sqlVariables = $sqlVariables;
     }
 }
