@@ -1,0 +1,38 @@
+{
+  "name": "Data Dictionary SQL Sanitizer",
+  "namespace": "VUMC\\DataDictionarySQLSanitizer",
+  "framework-version": 16,
+  "authors": [
+    {
+      "name": "Eva Bascompte Moragas",
+      "email": "datacore@vumc.org",
+      "institution": "Vanderbilt University Medical Center"
+    }
+  ],
+  "permissions": [],
+  "links": {
+    "project": [
+      {
+        "name": "DD SQL Sanitizer",
+        "icon": "fas fa-solid fa-file-circle-check",
+        "url": "index.php",
+        "show-header-and-footer": true
+      }
+    ]
+  },
+  "no-auth-pages": [],
+  "description": "An external module that sanitizes PIDs within SQL fields. This ensures that users can download the Data Dictionary without any current PIDs present in the SQL fields.",
+  "project-settings": [
+    {
+      "key": "pid-constant",
+      "name": "<div>PID Constant</div>\n<font style=\"color:red; font-style:italic;\">\n*Enter the name of the constant you want to use to replace the PID.<br/>\nIf left blank, the PIDs will be replaced with empty values.\n</font>",
+      "type": "text"
+    }
+  ],
+  "crons": [
+  ],
+  "compatibility": {
+    "php-version-min": "8.2.0",
+    "redcap-version-min": "14.8.2"
+  }
+}
