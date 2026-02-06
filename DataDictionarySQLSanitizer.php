@@ -29,9 +29,6 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
 
     public function loadTwigExtensions(): void
     {
-        $function = new TwigFunction('redcap_get_instrument_names', [\REDCap::class, 'getInstrumentNames']);
-        $this->getTwig()->addFunction($function);
-
         $this->getTwig()->addGlobal('APP_PATH_WEBROOT_ALL', APP_PATH_WEBROOT_ALL);
     }
 

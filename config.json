@@ -25,7 +25,7 @@
   "project-settings": [
     {
       "key": "pid-constant",
-      "name": "<div>PID Constant</div>\n<font style=\"color:red; font-style:italic;\">\n*Enter the name of the constant you want to use to replace the PID.<br/>\nIf left blank, the PIDs will be replaced with empty values.\n</font>",
+      "name": "<div>PID Placeholder</div>\n<font style=\"color:red; font-style:italic;\">\n*Enter the name of the placeholder you want to use to replace the PID.<br/>\nIf left blank, the PIDs will be replaced with empty values.\n</font>",
       "type": "text"
     }
   ],

@@ -88,6 +88,9 @@
    <div class="alert alert-success" style="display:none;margin-top: 20px;max-width: 690px;" id="message">Data Dictionary downloaded successfully!</div>
 
    <div class="row">
+       <div class="mb-3">
+           This module allows users to download the current Data Dictionary while replacing PIDs in all SQL fields with a placeholder defined on the module's configuration page.
+       </div>
         <div class="col-sm-6">
             <div class="round chklist">
                 <div class="chklisthdr">Instructions</div>
@@ -96,12 +99,7 @@
                     <ol>
                         <li class="mb-3">
                             <p>
-                                This module allows users to download the current Data Dictionary while replacing PIDs in all SQL fields with a constant defined on the module's configuration page.
-                            </p>
-                        </li>
-                        <li class="mb-3">
-                            <p>
-                                Specify the name of the constant to replace the PID in the <a href="{{ APP_PATH_WEBROOT_ALL ~ "ExternalModules/manager/project.php?pid=" ~ pid }}" target="_blank">module's configuration</a>, or manually input the values afterward.
+                                Specify the name of the placeholder to replace the PID in the <a href="{{ APP_PATH_WEBROOT_ALL ~ "ExternalModules/manager/project.php?pid=" ~ pid }}" target="_blank">module's configuration</a>, or manually input the values afterward.
                             </p>
                         </li>
                         <li class="mb-3">
