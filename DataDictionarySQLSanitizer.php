@@ -130,7 +130,7 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
             $constantArray = [];
             foreach ($allUniquePids as $index => $pid) {
                 $constant = $this->getProjectSetting("pid-constant");
-                $constantValue = !empty($constant) ? $constant . ($index + 1) : "";
+                $constantValue = !empty($constant) ? $constant : "";
 
                 $constantArray[] = new ProjectSqls(
                     $pid,
