@@ -34,7 +34,7 @@ if (!$output) {
 
 // Add new headers
 $newHeaders = array_values($headerMapping); // Get the new header values
-fputcsv($output, $newHeaders); // Write the new headers to the CSV
+$module->escape(fputcsv($output, $newHeaders)); // Write the new headers to the CSV
 
 // Write the data rows with the same header order
 foreach ($sanitizedDataDictionary as $fields) {
