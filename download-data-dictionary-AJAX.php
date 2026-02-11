@@ -34,7 +34,7 @@ if (!$output) {
 
 // Add new headers
 $newHeaders = array_values($headerMapping); // Get the new header values
-$module->escape(fputcsv($output, $newHeaders)); // Write the new headers to the CSV
+fputcsv($output,  $module->escape($newHeaders)); // Write the new headers to the CSV
 
 // Write the data rows with the same header order
 foreach ($sanitizedDataDictionary as $fields) {
@@ -43,7 +43,7 @@ foreach ($sanitizedDataDictionary as $fields) {
     foreach (array_keys($headerMapping) as $key) {
         $row[] = $fields[$key] ?? ''; // Use the value if it exists, otherwise empty string
     }
-    $module->escape(fputcsv($output, $row)); // Write the row to the CSV
+   fputcsv($output,  $row); // Write the row to the CSV
 }
 
 // Close the output stream
