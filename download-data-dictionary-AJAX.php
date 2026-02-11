@@ -43,7 +43,7 @@ foreach ($sanitizedDataDictionary as $fields) {
     foreach (array_keys($headerMapping) as $key) {
         $row[] = $fields[$key] ?? ''; // Use the value if it exists, otherwise empty string
     }
-    fputcsv($output, $row); // Write the row to the CSV
+    $module->escape(fputcsv($output, $row)); // Write the row to the CSV
 }
 
 // Close the output stream
