@@ -199,7 +199,11 @@ class DataDictionarySQLSanitizer extends AbstractExternalModule
                         foreach ($sqlEntry['sqlVariables'] as $sqlKey => $sqlValue) {
                             if ($sqlKey == $row['field_name']) {
                                 // Replacement logic
-                                $replacement = $sqlEntry['constant'];
+                                if(empty($sqlEntry['constant'])){
+                                    $replacement = "''";
+                                }else{
+                                    $replacement = $sqlEntry['constant'];
+                                }
                                 $row['select_choices_or_calculations'] = preg_replace_callback(
                                     $patterns,
                                     function ($matches) use ($sqlEntry, $replacement) {
